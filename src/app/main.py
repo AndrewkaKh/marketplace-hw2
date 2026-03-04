@@ -2,11 +2,13 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from app.api.auth import router as auth_router
+from app.api.orders import router as orders_router
+from app.api.products import router as products_router
+from app.api.promo_codes import router as promo_router
 from app.errors import ApiError
 from app.middlewares.logging import JsonAccessLogMiddleware
 from app.middlewares.request_id import RequestIdMiddleware
-from app.security.jwt import bearer_auth_dependency
-import impl
 
 
 def create_app() -> FastAPI:
@@ -31,6 +33,7 @@ def create_app() -> FastAPI:
                     "message": e.get("msg", "Invalid value"),
                 }
             )
+
         return JSONResponse(
             status_code=400,
             content={
@@ -40,23 +43,10 @@ def create_app() -> FastAPI:
             },
         )
 
-    from marketplace_gen.apis.auth_api import router as auth_router
-    from marketplace_gen.apis.products_api import router as products_router
-    from marketplace_gen.apis.orders_api import router as orders_router
-    from marketplace_gen.apis.promo_codes_api import router as promo_router
-
     app.include_router(auth_router)
     app.include_router(products_router)
     app.include_router(orders_router)
     app.include_router(promo_router)
-
-    from marketplace_gen import security_api as gen_security
-
-    token_dep = getattr(gen_security, "get_token_bearerAuth", None) or getattr(
-        gen_security, "get_token_bearer_auth", None
-    )
-    if token_dep is not None:
-        app.dependency_overrides[token_dep] = bearer_auth_dependency
 
     return app
 

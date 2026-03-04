@@ -1,19 +1,16 @@
-from app.errors import ApiError
+from app.db.session import db_session
 from app.security.rbac import require_roles
-
-from marketplace_gen.apis.promo_codes_api_base import BasePromoCodesApi
-from marketplace_gen.models.promo_code_create import PromoCodeCreate
-from marketplace_gen.models.promo_code_response import PromoCodeResponse
+from app.services.promo_service import PromoService
+from generated.src.marketplace_gen.models.promo_code_create import PromoCodeCreate
+from generated.src.marketplace_gen.models.promo_code_response import PromoCodeResponse
+from generated.src.marketplace_gen.apis.promo_codes_api_base import BasePromoCodesApi
 
 
 class PromoCodesApiImpl(BasePromoCodesApi):
-    """
-    Реализация /promo-codes.
-    В ТЗ: SELLER и ADMIN могут создавать промокоды.
-    """
-
     async def create_promo_code(self, promo_code_create: PromoCodeCreate) -> PromoCodeResponse:
         require_roles("SELLER", "ADMIN")
-
-        # TODO: promo_service.create(promo_code_create)
-        raise ApiError(501, "NOT_IMPLEMENTED", "create_promo_code not implemented", None)
+        db = next(db_session())
+        try:
+            return PromoService(db).create(promo_code_create)
+        finally:
+            db.close()

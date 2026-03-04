@@ -683,16 +683,16 @@ components:
       name: id
       required: true
       schema:
-        type: string
-        format: uuid
+        type: integer
+        format: int64
 
     OrderId:
       in: path
       name: id
       required: true
       schema:
-        type: string
-        format: uuid
+        type: integer
+        format: int64
 
   responses:
     AuthError:
@@ -820,8 +820,8 @@ components:
       required: [product_id, requested, available]
       properties:
         product_id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         requested:
           type: integer
           minimum: 1
@@ -887,8 +887,8 @@ components:
       required: [id, email, role, created_at]
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         email:
           type: string
           format: email
@@ -992,8 +992,8 @@ components:
       required: [id, name, price, stock, category, status, created_at, updated_at]
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         name:
           type: string
         description:
@@ -1041,8 +1041,8 @@ components:
       required: [product_id, quantity]
       properties:
         product_id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         quantity:
           type: integer
           minimum: 1
@@ -1079,11 +1079,11 @@ components:
       required: [id, product_id, quantity, price_at_order]
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         product_id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         quantity:
           type: integer
         price_at_order:
@@ -1096,11 +1096,11 @@ components:
       required: [id, user_id, status, total_amount, discount_amount, items, created_at, updated_at]
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         user_id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         status:
           $ref: '#/components/schemas/OrderStatus'
         promo_code:
@@ -1155,8 +1155,8 @@ components:
       required: [id, code, discount_type, discount_value, min_order_amount, max_uses, current_uses, valid_from, valid_until, active, created_at]
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int64
         code:
           type: string
         discount_type:
