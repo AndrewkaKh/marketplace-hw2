@@ -50,10 +50,8 @@ def create_app() -> FastAPI:
     app.include_router(orders_router)
     app.include_router(promo_router)
 
-    # Override generated security dependency (bearerAuth)
     from marketplace_gen import security_api as gen_security
 
-    # Обычно генератор делает get_token_bearerAuth
     token_dep = getattr(gen_security, "get_token_bearerAuth", None) or getattr(
         gen_security, "get_token_bearer_auth", None
     )
